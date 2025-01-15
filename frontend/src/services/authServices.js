@@ -2,7 +2,9 @@ import axios from 'axios'
 const END_POINT=import.meta.env.VITE_BACKEND_ENDPOINT
 import { userDetailInLocalstorage } from '../constants/constants'
 export const userLogin=async(data)=>{
-    const response=await axios.post(`${END_POINT}/auth/login`,data)
+    const response=await axios.post(`${END_POINT}/auth/login`,data,{
+        withCredentials:true
+    })
     if(response.status===200){
         localStorage.setItem(userDetailInLocalstorage,JSON.stringify(response.data))
         return response.data

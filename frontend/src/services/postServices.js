@@ -7,7 +7,8 @@ export const getFeed=async()=>{
     const response=await axios.get(`${END_POINT}/posts`,{
         headers:{
             Authorization:`Bearer ${token}`
-        }
+        },
+        withCredentials:true
     })
     if(response.status===200){
         return response.data
@@ -22,7 +23,8 @@ export const addPost=async(content)=>{
     const response=await axios.post(`${END_POINT}/posts`,{content},{
         headers:{
             Authorization:`Bearer ${token}`
-        }
+        },
+        withCredentials:true
     })
     if(response.status===201){
         return response.data
@@ -38,7 +40,7 @@ export const deletePost=async(id)=>{
             Authorization:`Bearer ${token}`,
     
         },
-        
+        withCredentials:true
     })
     if(response.status===200){
         return response.data
@@ -58,6 +60,7 @@ export const likePost=async(postId)=>{
             Authorization:`Bearer ${token}`,
     
         },
+        withCredentials:true
         
     })
     if(response.status===200){
