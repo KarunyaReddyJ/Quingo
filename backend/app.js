@@ -17,6 +17,9 @@ app.use(useCors);
 app.use(cookieParser())
 app.use(logger)
 // API routes
+app.get('/',(req,res)=>{
+    res.status(200).send("sucessfull")
+})
 app.use("/api/auth",authRoutes)
 app.use("/api/posts",protect,postRoutes);
 app.use("/api/users",protect,userRoutes);
