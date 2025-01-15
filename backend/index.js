@@ -1,15 +1,15 @@
 import express from "express";
-import { notFound, errorHandler } from "../src/middlewares/errorMiddleware.js";
-import { protect } from "../src/middlewares/authMiddleware.js";
-import { isAdmin } from "../src/middlewares/adminMiddleware.js";
-import logger from "../src/middlewares/loggerMiddleware.js";
-import { useCors } from "../src/middlewares/corsMiddleware.js";
-import postRoutes from "../src/routes/postRoutes.js";
-import userRoutes from "../src/routes/userRoutes.js";
+import { notFound, errorHandler } from "./src/middlewares/errorMiddleware.js";
+import { protect } from "./src/middlewares/authMiddleware.js";
+import { isAdmin } from "./src/middlewares/adminMiddleware.js";
+import logger from "./src/middlewares/loggerMiddleware.js";
+import { useCors } from "./src/middlewares/corsMiddleware.js";
+import postRoutes from "./src/routes/postRoutes.js";
+import userRoutes from "./src/routes/userRoutes.js";
 import dotenv from "dotenv";
-import connectDB from "../src/config/db.js";
+import connectDB from "./src/config/db.js";
 // import adminRoutes from "./src/routes/adminRoutes.js";
-import authRoutes from '../src/routes/authRoutes.js'
+import authRoutes from './src/routes/authRoutes.js'
 import cookieParser from "cookie-parser";
 
 dotenv.config();
