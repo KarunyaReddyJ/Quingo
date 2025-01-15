@@ -5,9 +5,18 @@ import connectDB from "./src/config/db.js";
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
-connectDB()
-.then(()=>{
-  app.listen(PORT, () =>
-    console.log(`Server running on port ${PORT}`)
-  );
-})
+// connectDB()
+// .then(()=>{
+//   app.listen(PORT, () =>
+//     console.log(`Server running on port ${PORT}`)
+//   );
+// })
+
+connectDB().then(() => {
+  console.log("Database connected successfully");
+});
+
+// Export the app as a Vercel serverless function
+export default (req, res) => {
+  app(req, res); // Call the app function that handles routes
+};
