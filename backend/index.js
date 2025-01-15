@@ -21,8 +21,9 @@ app.use(useCors);
 app.use(cookieParser())
 app.use(logger)
 // API routes
+const client_url=process.env.CLIENT_URL || 'hello'
 app.get('/', (req, res) => {
-    res.status(200).send("sucessfull")
+    res.status(200).send(client_url)
 })
 app.use("/api/auth", authRoutes)
 app.use("/api/posts", protect, postRoutes);
