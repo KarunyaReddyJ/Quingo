@@ -1,7 +1,13 @@
 import cors from "cors";
 
 export const corsOptions = {
-  origin: process.env.CLIENT_URL || "https://quingo-d3dd.vercel.app/", // Replace with your frontend URL
+  origin: (origin, callback) => {
+    if (origin === "https://quingo-d3dd.vercel.app") {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 };
 
