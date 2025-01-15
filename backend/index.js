@@ -44,4 +44,4 @@ connectDB()
 // Connect to the database
 
 
-export { app }
+export default app 
