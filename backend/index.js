@@ -23,7 +23,7 @@ app.use(logger)
 // API routes
 const client_url=process.env.CLIENT_URL || 'hello'
 app.get('/', (req, res) => {
-    res.status(200).send(client_url)
+    res.status(200).json(useCors)
 })
 app.use("/api/auth", authRoutes)
 app.use("/api/posts", protect, postRoutes);
