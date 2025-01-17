@@ -16,21 +16,21 @@ import cors from "cors";
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
-const corsU=cors(
- {
-  origin: (origin, callback) => {
-    if (!origin  || origin.includes('quingo') || 'http://localhost:5173' ) {
-      callback(null, true);  
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }  
-  }, 
-  credentials: true,
-}
-)
+// const corsU=cors(
+//  {
+//   origin: (origin, callback) => {
+//     if (!origin  || origin.includes('quingo') || 'http://localhost:5173' ) {
+//       callback(null, true);  
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }  
+//   }, 
+//   credentials: true,
+// }
+// )
 const app = express();
 app.use(express.json()); // Body parser
-app.use(corsU);
+app.use(useCors);
 app.use(cookieParser())
 app.use(logger)
 // API routes
