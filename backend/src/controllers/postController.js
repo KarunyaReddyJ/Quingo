@@ -4,9 +4,9 @@ import User from '../models/User.js'
 
 export const createPost=async(req,res,next)=>{
     try {
-        const {content,user}=req.body
+        const {content}=req.body
         const User=req.user
-        const postCreated=await Post.create({content,user:user || User._id})
+        const postCreated=await Post.create({content,user: User._id})
 
         if(postCreated){
             res.status(201).json({post:postCreated})
