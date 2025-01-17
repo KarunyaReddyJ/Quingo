@@ -14,16 +14,31 @@ import cookieParser from "cookie-parser";
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
-
+const corsU={
+  origin: (origin, callback) => {
+    if (!origin  || origin.includes('quingo') || 'http://localhost:5173' ) {
+      callback(null, true);  
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }  
+  }, 
+  credentials: true,
+}
 const app = express();
 app.use(express.json()); // Body parser
-app.use(useCors);
+app.use({
+  ...useCors,
+  ...corsU
+});
 app.use(cookieParser())
 app.use(logger)
 // API routes
 const client_url=process.env.CLIENT_URL || 'hello'
 app.get('/', (req, res) => {
-    res.status(200).json(useCors)
+    res.status(200).json({
+      corsU,
+      useCors
+    })
 })
 app.use("/api/auth", authRoutes)
 app.use("/api/posts", protect, postRoutes);
