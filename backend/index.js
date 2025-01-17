@@ -3,7 +3,7 @@ import { notFound, errorHandler } from "./src/middlewares/errorMiddleware.js";
 import { protect } from "./src/middlewares/authMiddleware.js";
 import { isAdmin } from "./src/middlewares/adminMiddleware.js";
 import logger from "./src/middlewares/loggerMiddleware.js";
-import { useCors } from "./src/middlewares/corsMiddleware.js";
+import { corsOptions, useCors } from "./src/middlewares/corsMiddleware.js";
 import postRoutes from "./src/routes/postRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import dotenv from "dotenv";
@@ -11,10 +11,13 @@ import connectDB from "./src/config/db.js";
 // import adminRoutes from "./src/routes/adminRoutes.js";
 import authRoutes from './src/routes/authRoutes.js'
 import cookieParser from "cookie-parser";
+import cors from "cors";
+
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
-const corsU={
+const corsU=cors(
+ {
   origin: (origin, callback) => {
     if (!origin  || origin.includes('quingo') || 'http://localhost:5173' ) {
       callback(null, true);  
@@ -24,20 +27,27 @@ const corsU={
   }, 
   credentials: true,
 }
+)
 const app = express();
 app.use(express.json()); // Body parser
-app.use({
-  ...useCors,
-  ...corsU
-});
+app.use(corsU);
 app.use(cookieParser())
 app.use(logger)
 // API routes
 const client_url=process.env.CLIENT_URL || 'hello'
 app.get('/', (req, res) => {
     res.status(200).json({
-      corsU,
-      useCors
+      corsOptions,
+      corsu:{
+        origin: (origin, callback) => {
+          if (!origin  || origin.includes('quingo') || 'http://localhost:5173' ) {
+            callback(null, true);  
+          } else {
+            callback(new Error('Not allowed by CORS'));
+          }  
+        }, 
+        credentials: true,
+      }
     })
 })
 app.use("/api/auth", authRoutes)
