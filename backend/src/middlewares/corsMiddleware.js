@@ -2,6 +2,10 @@ import cors from "cors";
 
 export const corsOptions = {
   origin: (Origin,cb)=>{
+    if(!Origin){
+      console.log('No origin')
+      return cb(null,true)
+    }
     console.log('origin made request',Origin)
     console.log('includes localhost ',Origin.includes('localhost'));
     console.log('includes quingo ',Origin.includes('quingo'));
