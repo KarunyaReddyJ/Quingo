@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { DB_PASSWORD,DB_USERNAME,DB_NAME } from './env.js'; 
-const URI=`mongodb+srv://karunyareddy1418:JMppcPdHTsHfYZJk@cluster0.du2qj.mongodb.net/socialmediaapp?retryWrites=true&w=majority&appName=Cluster0`
+const URI=`mongodb+srv://karunyareddy1418AC:JMppcPdHTsHfYZJk@cluster0.du2qj.mongodb.net/socialmediaapp?retryWrites=true&w=majority&appName=Cluster0`
 
 const connectDb=async()=>{
     try {
