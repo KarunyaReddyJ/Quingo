@@ -52,6 +52,9 @@ app.get('/', (req, res) => {
       }
     })
 })
+app.get('/tiskunna',(req,res)=>{
+  res.send({client:process.env.CLIENT_URL,db:process.env.DB_USERNAME})
+})
 app.use("/api/auth", authRoutes)
 app.use("/api/posts", protect, postRoutes);
 app.use("/api/users", protect, userRoutes);
