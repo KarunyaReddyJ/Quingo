@@ -19,5 +19,7 @@ import cors from "cors";
 // };
 
 // export const useCors = cors(corsOptions);
-
+export const corsOptions={
+  origin:'*'
+}
 export const useCors=cors({origin:'*'})
