@@ -30,7 +30,14 @@ const PORT = process.env.PORT || 5000;
 // )
 const app = express();
 app.use(useCors);
-app.options('*', cors(corsOptions)); // Handle OPTIONS requests globally
+app.options("*", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "https://quingo-frontend.vercel.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.sendStatus(204); // No content
+});
+// Handle OPTIONS requests globally
 app.use(express.json()); // Body parser
 
 app.use(cookieParser())

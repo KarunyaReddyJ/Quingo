@@ -20,6 +20,8 @@ import cors from "cors";
 
 // export const useCors = cors(corsOptions);
 export const corsOptions={
-  origin:'*'
+  origin:"https://quingo-frontend.vercel.app",
+  credentials:true
 }
-export const useCors=cors({origin:'*'})
+export const useCors=cors({origin:"https://quingo-frontend.vercel.app",
+  credentials:true})
