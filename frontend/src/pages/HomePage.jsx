@@ -32,6 +32,7 @@ const HomePage = () => {
         setPosts(data);
       } catch (error) {
         console.error("cannot fetch posts", error);
+        console.error('error message is',error.message);
         toast.error("Cannot fetch posts");
       } finally {
         setPostLoading(false);
@@ -46,7 +47,11 @@ const HomePage = () => {
       document.documentElement.offsetHeight
     ) {
       setPage((prevPage) => prevPage + 1);
-      toast.loading("Loading more posts");
+      toast.loading("Loading more posts").then((id) => {  
+        setTimeout(() => {
+          toast.dismiss(id);
+        }, 1000);
+      });
     }
   };
   useEffect(() => {
