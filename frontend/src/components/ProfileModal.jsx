@@ -27,9 +27,9 @@ const ProfileModal = ({ id, name, email }) => {
   return (
     <div style={styles.modalContainer}>
       {
-        loading ? <h1>Loading...</h1>:<>(userDetails && userDetails.name === name) ? <Button text='Logout' onChange={handleLogout} />:<Button text='Add Friend' onChange={()=>{
+        loading ? <h1>Loading...</h1>:(userDetails && userDetails.name === name) ? <Button text='Logout' onChange={handleLogout} />:<Button text='Add Friend' onChange={()=>{
           toast.success('Friend Request Sent')
-        }} /></>
+        }} />
         
       }
       <Button
