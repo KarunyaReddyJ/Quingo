@@ -8,26 +8,13 @@ import postRoutes from "./src/routes/postRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import dotenv from "dotenv";
 import connectDB from "./src/config/db.js";
-// import adminRoutes from "./src/routes/adminRoutes.js";
 import authRoutes from './src/routes/authRoutes.js'
 import cookieParser from "cookie-parser";
-import cors from "cors";
 
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
-// const corsU=cors(
-//  {
-//   origin: (origin, callback) => {
-//     if (!origin  || origin.includes('quingo') || 'http://localhost:5173' ) {
-//       callback(null, true);  
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }  
-//   }, 
-//   credentials: true,
-// }
-// )
+
 const app = express();
 app.use(useCors);
 app.options("*", (req, res) => {
@@ -35,15 +22,13 @@ app.options("*", (req, res) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.sendStatus(204); // No content
+  res.sendStatus(204); 
 });
 // Handle OPTIONS requests globally
 app.use(express.json()); // Body parser
 
 app.use(cookieParser())
 app.use(logger)
-// API routes
-const client_url=process.env.CLIENT_URL || 'hello'
 app.get('/', (req, res) => {
     res.status(200).json({
       corsOptions,

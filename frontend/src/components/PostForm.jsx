@@ -10,7 +10,7 @@ const PostForm = () => {
   const { setPosts } = usePosts();
 
   const handleSubmit = async () => {
-    //e.preventDefault();
+    e.preventDefault();
     const response = await addPost(content);
     console.log("added post", response);
     if (response) {
