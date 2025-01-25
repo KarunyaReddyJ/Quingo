@@ -40,7 +40,7 @@ const PostModal = ({ id, user, content, likes, comments }) => {
         <div style={styles.commentCount}>
           {post.comments} comments
         </div>
-        {userDetails && userDetails.username === post.user && (
+        {userDetails && userDetails.name === post.user && (
           <button style={styles.deleteButton} onClick={handleDelete}>
             Delete
           </button>
