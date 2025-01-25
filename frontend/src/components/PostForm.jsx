@@ -9,7 +9,7 @@ const PostForm = () => {
   const [content, setPostData] = useState("");
   const { setPosts } = usePosts();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await addPost(content);
     console.log("added post", response);
