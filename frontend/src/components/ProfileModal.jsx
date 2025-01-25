@@ -5,10 +5,10 @@ import { useAuth } from "../hooks/useAuth";
 import { useState, useEffect } from "react";
 import { getUserProfile } from "../services/userService";
 import PostModal from "./PostModal";
-
+import toast from "react-hot-toast";
 // eslint-disable-next-line react/prop-types
 const ProfileModal = ({ id, name, email }) => {
-  const { setUserDetails } = useAuth();
+  const { setUserDetails,userDetails,loading } = useAuth();
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
@@ -26,6 +26,12 @@ const ProfileModal = ({ id, name, email }) => {
 
   return (
     <div style={styles.modalContainer}>
+      {
+        loading ? <h1>Loading...</h1>:<>(userDetails && userDetails.name === name) ? <Button text='Logout' onChange={handleLogout} />:<Button text='Add Friend' onChange={()=>{
+          toast.success('Friend Request Sent')
+        }} /></>
+        
+      }
       <Button
         onChange={handleLogout}
         text={"Logout"}
