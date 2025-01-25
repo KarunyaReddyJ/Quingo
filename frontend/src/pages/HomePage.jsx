@@ -29,7 +29,7 @@ const HomePage = () => {
       setPostLoading(true);
       try {
         const data = await getFeed(page);
-        setPosts(data);
+        setPosts(prev=>[...prev,data]);
       } catch (error) {
         console.error("cannot fetch posts", error);
         console.error('error message is',error.message);
