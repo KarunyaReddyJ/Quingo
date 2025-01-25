@@ -52,7 +52,7 @@ const SideBar = () => {
           <Link to="/profile" style={styles.link}>Profile</Link>
         </li>
         <li style={styles.li} >
-          <Link to="/friends" style={styles.link} >Friends</Link>
+          <Link to="/friend" style={styles.link} >Friends</Link>
         </li>
       </ul>
     </aside>

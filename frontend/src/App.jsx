@@ -10,6 +10,7 @@ import { PostContextProvider } from "./context_provider/PostContextProvider";
 import Layout from "./components/Layout";
 import AddPost from "./pages/AddPost";
 import Profile from "./pages/Profile";
+import Friend from "./pages/Friend";
 
 function App() {
   return (
@@ -24,11 +25,11 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/post" element={<AddPost/>}/>
             <Route path="/profile" element={<Profile/>}/>
-            <Route path="/friend" element={<>Friends</>} />
+            <Route path="/friend" element={<Friend/>} />
             <Route path="*" element={<HomePage/>} />
           </Routes>
           </Layout>
-        </PostContextProvider>
+        </PostContextProvider
       </AuthContextProvider>
     </BrowserRouter>
   );
