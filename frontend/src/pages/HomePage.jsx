@@ -11,7 +11,7 @@ const HomePage = () => {
     posts,
     loading: postsLoading,
     setPosts,
-    setLoding: setPostLoading,
+    setLoading: setPostLoading,
   } = usePosts();
   const navigate = useNavigate();
   //const [posts, setPosts] = useState([]);
