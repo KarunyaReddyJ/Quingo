@@ -2,9 +2,8 @@ import axios from 'axios'
 import { userDetailInLocalstorage } from '../constants/constants'
 const END_POINT=import.meta.env.VITE_BACKEND_ENDPOINT
 const token=JSON.parse(localStorage.getItem(userDetailInLocalstorage))?.token || ''
-export const getFeed=async()=>{
-    
-    const response=await axios.get(`${END_POINT}/posts`,{
+export const getFeed=async(page=1)=>{
+    const response=await axios.get(`${END_POINT}/posts?page=${page}&limit=10`,{
         headers:{
             Authorization:`Bearer ${token}`
         },

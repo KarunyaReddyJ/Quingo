@@ -20,7 +20,11 @@ export const createPost=async(req,res,next)=>{
 
 export const readPosts = async (req, res, next) => {
     try {
-        const posts = await Post.find({}).sort({createdAt:-1}).limit(15);
+        const { page = 1, limit = 10 } = req.query;
+        const pageNumber = parseInt(page, 10);
+        const pageSize = parseInt(limit, 10);
+        const skip = (pageNumber - 1) * pageSize;
+        const posts = await Post.find({}).sort({createdAt:-1}).skip(skip).limit(pageSize);
         const cache = new Map();
 
         const userPromises = posts.map(async (post) => {

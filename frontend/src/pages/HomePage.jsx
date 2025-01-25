@@ -3,13 +3,19 @@ import { useAuth } from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 import PostModal from "../components/PostModal";
 import { usePosts } from "../hooks/usePosts";
-
+import { getFeed } from "../services/postServices";
+import toast from "react-hot-toast";
 const HomePage = () => {
   const { userDetails, loading } = useAuth();
-  const { posts: Posts, loading: postsLoading } = usePosts();
+  const {
+    posts,
+    loading: postsLoading,
+    setPosts,
+    setLoding: setPostLoading,
+  } = usePosts();
   const navigate = useNavigate();
-  const [posts, setPosts] = useState([]);
-
+  //const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(1);
   useEffect(() => {
     if (!loading) {
       if (!userDetails) {
@@ -19,37 +25,58 @@ const HomePage = () => {
   }, [loading, navigate, userDetails]);
 
   useEffect(() => {
-    if (!postsLoading) {
-      setPosts(Posts);
-    }
-  }, [Posts, postsLoading]);
+    const fetchPosts = async () => {
+      setPostLoading(true);
+      try {
+        const data = await getFeed(page);
+        setPosts(data);
+      } catch (error) {
+        console.error("cannot fetch posts", error);
+        toast.error("Cannot fetch posts");
+      } finally {
+        setPostLoading(false);
+      }
+    };
+    fetchPosts();
+  }, [page, setPostLoading, setPosts]);
 
-  if (loading) {
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight
+    ) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // useEffect(() => {
+  //   if (!postsLoading) {
+  //     setPosts(Posts);
+  //   }
+  // }, [Posts, postsLoading]);
+
+  if (loading || postsLoading) {
     return <div>Loading...</div>;
   }
 
-  
-
   return (
     <div style={{ fontFamily: "Arial, sans-serif", padding: "20px" }}>
-      
-
-    
-        <div>
-        
-          {posts.map((post) => (
-            <PostModal
-              key={post._id}
-              user={post.user}
-              content={post.content}
-              likes={post.likes?.length || 0}
-              comments={post.comments?.length || 0}
-              id={post._id}
-            />
-          ))}
-          
-        </div>
-      
+      <div>
+        {posts.map((post) => (
+          <PostModal
+            key={post._id}
+            user={post.user}
+            content={post.content}
+            likes={post.likes?.length || 0}
+            comments={post.comments?.length || 0}
+            id={post._id}
+          />
+        ))}
+      </div>
     </div>
   );
 };
