@@ -46,6 +46,7 @@ const HomePage = () => {
       document.documentElement.offsetHeight
     ) {
       setPage((prevPage) => prevPage + 1);
+      toast.loading("Loading more posts");
     }
   };
   useEffect(() => {
