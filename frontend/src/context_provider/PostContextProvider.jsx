@@ -19,7 +19,7 @@ export const PostContextProvider=({children})=>{
     }, [userDetails]);
 
     return (
-        <PostContext.Provider value={{posts,setPosts,loading}} >
+        <PostContext.Provider value={{posts,setPosts,loading,setLoading}} >
             {children}
         </PostContext.Provider>
     )

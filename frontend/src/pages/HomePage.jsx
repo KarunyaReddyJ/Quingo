@@ -8,10 +8,10 @@ import toast from "react-hot-toast";
 const HomePage = () => {
   const { userDetails, loading } = useAuth();
   const {
-    posts,
     loading: postsLoading,
-    setPosts,
     setLoading: setPostLoading,
+    posts,
+    setPosts,
   } = usePosts();
   const navigate = useNavigate();
   //const [posts, setPosts] = useState([]);
@@ -47,11 +47,13 @@ const HomePage = () => {
       document.documentElement.offsetHeight
     ) {
       setPage((prevPage) => prevPage + 1);
-      toast.loading("Loading more posts").then((id) => {  
-        setTimeout(() => {
-          toast.dismiss(id);
-        }, 1000);
-      });
+      
+      const id=toast.loading("Loading more posts")
+      console.log('toast id',id)
+      setTimeout(() => {
+        toast.dismiss(id)
+      }, 1000);
+      
     }
   };
   useEffect(() => {
