@@ -11,6 +11,7 @@ import Layout from "./components/Layout";
 import AddPost from "./pages/AddPost";
 import Profile from "./pages/Profile";
 import Friend from "./pages/Friend";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -26,10 +27,10 @@ function App() {
             <Route path="/post" element={<AddPost/>}/>
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/friend" element={<Friend/>} />
-            <Route path="*" element={<HomePage/>} />
+            <Route path="*" element={<NotFound/>} />
           </Routes>
           </Layout>
-        </PostContextProvider
+        </PostContextProvider>
       </AuthContextProvider>
     </BrowserRouter>
   );
