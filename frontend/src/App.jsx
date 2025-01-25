@@ -24,6 +24,7 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/post" element={<AddPost/>}/>
             <Route path="/profile" element={<Profile/>}/>
+            <Route path="/friend" element={<>Friends</>} />
           </Routes>
           </Layout>
         </PostContextProvider>
