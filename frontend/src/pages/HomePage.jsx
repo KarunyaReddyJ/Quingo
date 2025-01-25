@@ -67,7 +67,7 @@ const HomePage = () => {
   //   }
   // }, [Posts, postsLoading]);
 
-  if (loading || postsLoading) {
+  if (loading ) {
     return <div>Loading...</div>;
   }
 
@@ -84,6 +84,9 @@ const HomePage = () => {
             id={post._id}
           />
         ))}
+        {
+          postsLoading && <div>Loading...</div>
+        }
       </div>
     </div>
   );
