@@ -25,6 +25,7 @@ function App() {
             <Route path="/post" element={<AddPost/>}/>
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/friend" element={<>Friends</>} />
+            <Route path="*" element={<HomePage/>} />
           </Routes>
           </Layout>
         </PostContextProvider>
