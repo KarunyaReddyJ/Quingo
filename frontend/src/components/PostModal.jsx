@@ -2,10 +2,12 @@ import { deletePost, likePost } from '../services/postServices';
 import toast from 'react-hot-toast';
 import { usePosts } from '../hooks/usePosts';
 import { useState } from 'react';
+import { useAuth } from "../hooks/useAuth";
 
 // eslint-disable-next-line react/prop-types
 const PostModal = ({ id, user, content, likes, comments }) => {
   const { setPosts } = usePosts();
+  const { userDetails } = useAuth();
   const [post, setPost] = useState({ id, user, content, likes, comments });
 
   const likeThePost = async () => {
@@ -38,9 +40,11 @@ const PostModal = ({ id, user, content, likes, comments }) => {
         <div style={styles.commentCount}>
           {post.comments} comments
         </div>
-        <button onClick={handleDelete} style={styles.deleteButton}>
-          Delete
-        </button>
+        {userDetails && userDetails.username === post.user && (
+          <button style={styles.deleteButton} onClick={handleDelete}>
+            Delete
+          </button>
+        )}
       </div>
     </div>
   );

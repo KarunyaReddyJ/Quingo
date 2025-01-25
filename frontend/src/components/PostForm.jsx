@@ -4,11 +4,11 @@ import toast from "react-hot-toast";
 import { usePosts } from "../hooks/usePosts";
 import TextEditor from "./TextEditor";
 import Button from "../utils/Button";
-
+import { useAuth } from "../hooks/useAuth";
 const PostForm = () => {
   const [content, setPostData] = useState("");
   const { setPosts } = usePosts();
-
+  const { userDetails } = useAuth();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await addPost(content);
