@@ -1,61 +1,93 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Menu, X } from 'lucide-react'; 
 
 const styles = {
   aside: {
     padding: '20px',
     borderRadius: '8px',
-    width: '250px',  // Increased width for the sidebar
-    height: '100vh',  // Make it full height of the screen
-    position: 'fixed', // Fixed position so it stays on the left side
+    width: '250px',
+    height: '100vh',
+    position: 'fixed',
     top: 0,
     left: 0,
-    boxShadow: '2px 0px 5px rgba(0, 0, 0, 0.1)', // Adds a subtle shadow to the sidebar
-    background: '#f4f4f4', // Lighter background to separate from the content
-    zIndex: 1000, // Ensure it's above other content
+    boxShadow: '2px 0px 5px rgba(0, 0, 0, 0.1)',
+    background: '#f4f4f4',
+    zIndex: 1000,
+    transform: 'translateX(-100%)', // Hidden by default
+    transition: 'transform 0.3s ease-in-out',
+  },
+  asideOpen: {
+    transform: 'translateX(0)', // Slide in when open
   },
   ul: {
     listStyleType: 'none',
     padding: 0,
-    marginTop: '50px', // To add some space from the top
+    marginTop: '50px',
   },
   li: {
     marginBottom: '15px',
-    fontSize: '18px', // Adjusted font size for better readability
+    fontSize: '18px',
   },
   link: {
     color: '#333',
     textDecoration: 'none',
     fontSize: '18px',
     fontWeight: 'bold',
-    display: 'block', // Ensures the link takes the full width of the li element
-    padding: '10px 15px', // Adds padding inside the link for better click area
-    borderRadius: '5px', // Rounded corners for the link
+    display: 'block',
+    padding: '10px 15px',
+    borderRadius: '5px',
   },
   linkHover: {
     color: '#007BFF',
-    background: '#e9ecef', // Light background when hovered
+    background: '#e9ecef',
+  },
+  hamburger: {
+    position: 'fixed',
+    top: '15px',
+    left: '15px',
+    background: '#f4f4f4',
+    border: 'none',
+    cursor: 'pointer',
+    zIndex: 1100,
+    padding: '10px',
+    borderRadius: '5px',
+    boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
   },
 };
 
-// Usage in your component
 const SideBar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <aside style={styles.aside}>
-      <ul style={styles.ul}>
-        <li style={styles.li}>
-          <Link to="/" style={styles.link}>Home</Link>
-        </li>
-        <li style={styles.li}>
-          <Link to="/post" style={styles.link}>AddPost</Link>
-        </li>
-        <li style={styles.li}>
-          <Link to="/profile" style={styles.link}>Profile</Link>
-        </li>
-        <li style={styles.li} >
-          <Link to="/friend" style={styles.link} >Friends</Link>
-        </li>
-      </ul>
-    </aside>
+    <>
+      {/* Hamburger Icon */}
+      <button style={styles.hamburger} onClick={toggleSidebar}>
+        {isOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+
+      {/* Sidebar */}
+      <aside style={{ ...styles.aside, ...(isOpen ? styles.asideOpen : {}) }}>
+        <ul style={styles.ul}>
+          <li style={styles.li}>
+            <Link to="/" style={styles.link} onClick={toggleSidebar}>Home</Link>
+          </li>
+          <li style={styles.li}>
+            <Link to="/post" style={styles.link} onClick={toggleSidebar}>AddPost</Link>
+          </li>
+          <li style={styles.li}>
+            <Link to="/profile" style={styles.link} onClick={toggleSidebar}>Profile</Link>
+          </li>
+          <li style={styles.li}>
+            <Link to="/friend" style={styles.link} onClick={toggleSidebar}>Friends</Link>
+          </li>
+        </ul>
+      </aside>
+    </>
   );
 };
 
