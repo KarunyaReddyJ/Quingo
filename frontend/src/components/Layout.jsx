@@ -5,45 +5,31 @@ import SideBar from "./SideBar";
 // eslint-disable-next-line react/prop-types
 const Layout = ({ children }) => {
   return (
-    <div style={styles.container}>
-      <Header style={styles.header} />
-      <div style={styles.main}>
-        <SideBar style={styles.sidebar} />
-        <div style={styles.content}>
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100">
+      {/* Header */}
+      <header className="flex-shrink-0">
+        <Header />
+      </header>
+
+      {/* Main Content Area */}
+      <main className="flex flex-1">
+        {/* Sidebar */}
+        <aside className="w-64 flex-shrink-0">
+          <SideBar />
+        </aside>
+
+        {/* Main Page Content */}
+        <section className="flex-grow p-6">
           {children}
-        </div>
-      </div>
-    
+        </section>
+      </main>
+
+      {/* Footer (Optional - Uncomment if needed) */}
+      {/* <footer className="flex-shrink-0">
+        <Footer />
+      </footer> */}
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '100vh',
-    margin:'0',
-    padding:'0'
-  },
-  header: {
-    flexShrink: 0,
-  },
-  main: {
-    display: 'flex',
-    flexGrow: 1,
-  },
-  sidebar: {
-    flexShrink: 0,
-    width: '250px', // Adjust the width as needed
-  },
-  content: {
-    flexGrow: 1,
-    padding: '20px',
-  },
-  footer: {
-    flexShrink: 0,
-  },
 };
 
 export default Layout;

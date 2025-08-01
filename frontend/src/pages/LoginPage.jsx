@@ -30,28 +30,47 @@ const LoginPage = () => {
       toast.error("login unsuccessful");
     }
   };
-  return (
-    <form style={{display:'flex',flexDirection:'column',alignItems:'center'}} >
-      <Input
-        type="email"
-        name="email"
-        value={input.email}
-        onChange={handleTyping}
-        placeholder="email"
-      />{" "}
-      <br />
-      <Input
-        type="password"
-        name="password"
-        value={input.password}
-        onChange={handleTyping}
-        placeholder="pass***d"
-      />{" "}
-      <br />
-      <Button text={"login"} onChange={handleSubmit} /> <br />
-      <Link to="/signup"> {"Don't Have Account"} </Link>
-    </form>
-  );
+  return(  <form
+  onSubmit={handleSubmit}
+  className="flex flex-col gap-4 max-w-md mx-auto mt-16 bg-white shadow-md p-8 rounded-xl"
+>
+  <h2 className="text-2xl font-semibold text-center text-gray-800">Welcome Back</h2>
+
+  <input
+    type="email"
+    name="email"
+    value={input.email}
+    onChange={handleTyping}
+    placeholder="Email"
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+    required
+  />
+
+  <input
+    type="password"
+    name="password"
+    value={input.password}
+    onChange={handleTyping}
+    placeholder="Password"
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+    required
+  />
+
+  <button
+    type="submit"
+    className="bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2 rounded-lg transition"
+  >
+    Log In
+  </button>
+
+  <p className="text-sm text-center text-gray-600">
+    Don't have an account?{" "}
+    <Link to="/signup" className="text-indigo-500 hover:underline">
+      Sign up
+    </Link>
+  </p>
+</form>
+);
 };
 
 export default LoginPage;

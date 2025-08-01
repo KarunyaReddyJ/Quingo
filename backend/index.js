@@ -1,4 +1,5 @@
 import express from "express";
+import http from 'http'
 import { notFound, errorHandler } from "./src/middlewares/errorMiddleware.js";
 import { protect } from "./src/middlewares/authMiddleware.js";
 import { isAdmin } from "./src/middlewares/adminMiddleware.js";
@@ -11,11 +12,23 @@ import connectDB from "./src/config/db.js";
 import authRoutes from './src/routes/authRoutes.js'
 import cookieParser from "cookie-parser";
 
+import chatRoutes from './src/routes/chatRoutes.js'
+import testRoutes from './src/routes/testRoutes.js'
+import friendRoutes from './src/routes/friendRoutes.js'
+import testIfWorking from "./src/middlewares/testWorking.js";
+import { Server } from "socket.io";
+import chatSocket from './src/socket.js'
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: { origin: "*" }
+});
+
 app.use(useCors);
 app.options("*", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "https://quingo-frontend.vercel.app");
@@ -44,21 +57,28 @@ app.get('/', (req, res) => {
       }
     })
 })
-app.get('/tiskunna',(req,res)=>{
-  res.send({client:process.env.CLIENT_URL,db:process.env.DB_USERNAME})
-})
+
 app.use("/api/auth", authRoutes)
 app.use("/api/posts", protect, postRoutes);
 app.use("/api/users", protect, userRoutes);
+app.use("/api/messages",protect,chatRoutes)
+app.use("/api/friends",friendRoutes)
+
+app.use('/api/test',testIfWorking,testRoutes)
 // app.use("/api/admin",protect,isAdmin,adminRoutes);
 
+io.on("connection", (socket) => {
+  console.log("🟢 A user connected:", socket.id);
+  chatSocket(socket, io);
+});
 // Middleware for handling errors
 app.use(notFound);
 app.use(errorHandler);
 
+
 connectDB()
 .then(()=>{
-  app.listen(PORT, () =>
+  server.listen(PORT, () =>
     console.log(`Server running on port ${PORT}`)
   );
 })

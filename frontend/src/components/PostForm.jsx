@@ -26,7 +26,7 @@ const PostForm = () => {
     <form className="space-y-4 p-6  rounded-lg shadow-sm max-w-xl mx-auto">
       <TextEditor content={content} setContent={setPostData} />
 
-      <Button text={"Post"} onChange={handleSubmit} />
+      <Button text={"Post"} onClick={handleSubmit} />
     </form>
   );
 };

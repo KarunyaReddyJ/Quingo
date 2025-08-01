@@ -20,8 +20,8 @@ export const viewProfile=async(req,res,next)=>{
         const profile = await User.findById(id)
         const friendIds=profile.friends
         const userPromises = friendIds.map(async (friend) => {
-            const user = await User.findById(friend,{name});
-            return { id:friend,name:user.name };
+            const user = await User.findById(friend,'name');
+            return { id:friend,name:user?.name };
         });
 
         const resolvedFeed = await Promise.all(userPromises);

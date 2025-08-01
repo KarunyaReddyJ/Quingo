@@ -16,3 +16,18 @@ export const userLogin=async(data)=>{
 export const userLogout=()=>{
     localStorage.removeItem(userDetailInLocalstorage)
 }
+
+export const userSignup=async(data)=>{
+    const response=await axios.post(`${END_POINT}/auth/signup`,data,{
+        withCredentials:true
+    })
+    if(response.status===200){
+        localStorage.setItem(userDetailInLocalstorage,JSON.stringify(response.data))
+        return response.data
+    }
+    console.log(response.data)
+    return response.data
+}
+
+
+

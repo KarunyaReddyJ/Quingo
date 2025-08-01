@@ -29,22 +29,27 @@ export const userLogin=async(req,res)=>{
         res.status(500).send("Internal Server Error")
     }
 }
-export const userSignUp=async(req,res)=>{
+export const userSignUp=async(req,res)=>{console.log('signup')
     try {
         const {name,email,password}=req.body
+        console.log({name,email,password})
         const userFound=await User.findOne({email})
         if(userFound){
+            console.log('userFound',userFound)
             return res.status(501).send("User already exist")
         }
         const userCreated=new User({name,email,password})
-        await userCreated.save()
+        const user=await userCreated.save()
         const token=generateToken(userCreated._id)
         res.cookie('token',token,{
             httpOnly: true,  sameSite: 'Strict',
         })
+        console.log(userCreated)
         res.status(200).json({
+            _id:user.id,
             name,
-            role:userCreated.role
+            role:userCreated.role,
+            token
         })
 
     } catch (error) {

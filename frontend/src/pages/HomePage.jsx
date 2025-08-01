@@ -5,6 +5,9 @@ import PostModal from "../components/PostModal";
 import { usePosts } from "../hooks/usePosts";
 import { getFeed } from "../services/postServices";
 import toast from "react-hot-toast";
+import { indexedDBService } from "../services/localDatastore";
+import { LoadingComponent } from "../components/Loading";
+import { createDummyUsers,fakePosts } from "../utils/bulkimport";
 const HomePage = () => {
   const { userDetails, loading } = useAuth();
   const {
@@ -30,6 +33,7 @@ const HomePage = () => {
       try {
         const data = await getFeed(page);
         setPosts(prev=>[...prev,data]);
+        await indexedDBService.putMany(data)
       } catch (error) {
         console.error("cannot fetch posts", error);
         console.error('error message is',error.message);
@@ -58,6 +62,7 @@ const HomePage = () => {
   };
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
+  //  fakePosts()
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -67,26 +72,33 @@ const HomePage = () => {
   //   }
   // }, [Posts, postsLoading]);
 
-  if (loading ) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <LoadingComponent/>
+    );
   }
 
   return (
-    <div style={{ fontFamily: "Arial, sans-serif", padding: "20px" }}>
-      <div>
+    <div className="bg-gray-900 min-h-screen py-8 px-4 sm:px-8 font-sans">
+      <div className="max-w-3xl mx-auto space-y-6">
         {posts.map((post) => (
-          <PostModal
+          <div
             key={post._id}
-            user={post.user}
-            content={post.content}
-            likes={post.likes?.length || 0}
-            comments={post.comments?.length || 0}
-            id={post._id}
-          />
+            className="bg-white rounded-2xl shadow-md p-6 transition hover:shadow-lg"
+          >
+            <PostModal
+              user={post.user}
+              content={post.content}
+              likes={post.likes?.length || 0}
+              comments={post.comments?.length || 0}
+              id={post._id}
+            />
+          </div>
         ))}
-        {
-          postsLoading && <div>Loading...</div>
-        }
+
+        {postsLoading && (
+          <div className="flex justify-center py-4 text-gray-400">Loading more...</div>
+        )}
       </div>
     </div>
   );

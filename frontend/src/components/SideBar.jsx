@@ -1,90 +1,62 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react'; 
-
-const styles = {
-  aside: {
-    padding: '20px',
-    borderRadius: '8px',
-    width: '250px',
-    height: '100vh',
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    boxShadow: '2px 0px 5px rgba(0, 0, 0, 0.1)',
-    background: '#f4f4f4',
-    zIndex: 1000,
-    transform: 'translateX(-100%)', // Hidden by default
-    transition: 'transform 0.3s ease-in-out',
-  },
-  asideOpen: {
-    transform: 'translateX(0)', // Slide in when open
-  },
-  ul: {
-    listStyleType: 'none',
-    padding: 0,
-    marginTop: '50px',
-  },
-  li: {
-    marginBottom: '15px',
-    fontSize: '18px',
-  },
-  link: {
-    color: '#333',
-    textDecoration: 'none',
-    fontSize: '18px',
-    fontWeight: 'bold',
-    display: 'block',
-    padding: '10px 15px',
-    borderRadius: '5px',
-  },
-  linkHover: {
-    color: '#007BFF',
-    background: '#e9ecef',
-  },
-  hamburger: {
-    position: 'fixed',
-    top: '15px',
-    left: '15px',
-    background: '#f4f4f4',
-    border: 'none',
-    cursor: 'pointer',
-    zIndex: 1100,
-    padding: '10px',
-    borderRadius: '5px',
-    boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
-  },
-};
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Menu, X, Sun, Moon } from "lucide-react";
 
 const SideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+  const toggleSidebar = () => setIsOpen(!isOpen);
+  const toggleTheme = () => {
+    setDarkMode((prev) => !prev);
+    document.documentElement.classList.toggle("dark");
   };
 
   return (
     <>
       {/* Hamburger Icon */}
-      <button style={styles.hamburger} onClick={toggleSidebar}>
+      <button
+        onClick={toggleSidebar}
+        className="fixed top-4 left-4 z-50 p-2 rounded-md shadow-md bg-white dark:bg-gray-800"
+      >
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
       {/* Sidebar */}
-      <aside style={{ ...styles.aside, ...(isOpen ? styles.asideOpen : {}) }}>
-        <ul style={styles.ul}>
-          <li style={styles.li}>
-            <Link to="/" style={styles.link} onClick={toggleSidebar}>Home</Link>
-          </li>
-          <li style={styles.li}>
-            <Link to="/post" style={styles.link} onClick={toggleSidebar}>AddPost</Link>
-          </li>
-          <li style={styles.li}>
-            <Link to="/profile" style={styles.link} onClick={toggleSidebar}>Profile</Link>
-          </li>
-          <li style={styles.li}>
-            <Link to="/friend" style={styles.link} onClick={toggleSidebar}>Friends</Link>
-          </li>
+      <aside
+        className={`fixed top-0 left-0 h-full w-64 bg-gray-100 dark:bg-gray-900 shadow-md transform transition-transform duration-300 z-40 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Menu</h2>
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+            title="Toggle Theme"
+          >
+            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+        </div>
+
+        <ul className="mt-6 space-y-2 px-4">
+          {[
+            { to: "/", label: "Home" },
+            { to: "/post", label: "Add Post" },
+            { to: "/profile", label: "Profile" },
+            { to: "/friend", label: "Friends" },
+            { to: "/chat", label: "Messages" },
+          ].map(({ to, label }) => (
+            <li key={to}>
+              <Link
+                to={to}
+                onClick={toggleSidebar}
+                className="block px-4 py-2 rounded-lg text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
         </ul>
       </aside>
     </>

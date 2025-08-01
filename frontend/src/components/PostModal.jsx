@@ -3,8 +3,8 @@ import toast from 'react-hot-toast';
 import { usePosts } from '../hooks/usePosts';
 import { useState } from 'react';
 import { useAuth } from "../hooks/useAuth";
+import { FaHeart, FaRegHeart, FaCommentAlt, FaTrashAlt } from "react-icons/fa";
 
-// eslint-disable-next-line react/prop-types
 const PostModal = ({ id, user, content, likes, comments }) => {
   const { setPosts } = usePosts();
   const { userDetails } = useAuth();
@@ -25,81 +25,50 @@ const PostModal = ({ id, user, content, likes, comments }) => {
     toast.success('Successfully deleted');
   };
 
+  const isLiked = post.likes > 0; // customize this logic if you track individual user likes
+
   return (
-    <div style={styles.postContainer}>
-      <h3 style={styles.postUser}>{post.user}</h3>
+    <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-6 mb-6 shadow hover:shadow-lg transition-all">
+      {/* Post User */}
+      <h3 className="text-left text-lg font-semibold text-gray-800 dark:text-white mb-2">
+        {post.user}
+      </h3>
 
-      <p style={styles.postContent} dangerouslySetInnerHTML={{ __html: post.content }}></p>
+      {/* Post Content */}
+      <p
+        className="text-left text-gray-600 dark:text-gray-300 whitespace-pre-wrap mb-4"
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      ></p>
 
-      <hr style={styles.separator} />
+      <hr className="my-3 border-gray-200 dark:border-gray-600" />
 
-      <div style={styles.postFooter}>
-        <div onClick={likeThePost} style={styles.likeButton}>
-          {post.likes} likes
+      {/* Post Actions */}
+      <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300">
+        <button
+          onClick={likeThePost}
+          className="flex items-center gap-1 hover:text-red-500 transition"
+        >
+          {isLiked ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
+          <span>{post.likes}</span>
+        </button>
+
+        <div className="flex items-center gap-1">
+          <FaCommentAlt />
+          <span>{post.comments}</span>
         </div>
-        <div style={styles.commentCount}>
-          {post.comments} comments
-        </div>
-        {userDetails && userDetails.name === post.user && (
-          <button style={styles.deleteButton} onClick={handleDelete}>
-            Delete
+
+        {userDetails?.name === post.user && (
+          <button
+            onClick={handleDelete}
+            className="flex items-center gap-1 text-red-500 hover:text-red-600 transition"
+          >
+            <FaTrashAlt />
+            <span>Delete</span>
           </button>
         )}
       </div>
     </div>
   );
-};
-
-const styles = {
-  postContainer: {
-    border: '2px solid #ddd',
-    borderRadius: '10px',
-    marginBottom: '10px',
-    padding: '20px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    backgroundColor: '#fff',
-  },
-  postUser: {
-    fontSize: '18px',
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: '10px',
-    color: '#333',
-  },
-  postContent: {
-    fontSize: '16px',
-    textAlign: 'center',
-    marginBottom: '10px',
-    color: '#555',
-  },
-  separator: {
-    margin: '10px 0',
-    borderTop: '1px solid #eee',
-  },
-  postFooter: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontSize: '14px',
-    fontWeight: '500',
-    color: '#555',
-  },
-  likeButton: {
-    cursor: 'pointer',
-    color: '#007BFF',
-  },
-  commentCount: {
-    color: '#888',
-  },
-  deleteButton: {
-    padding: '5px 10px',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-    cursor: 'pointer',
-    background: 'transparent',
-    color: '#f44336', // Red color for delete button
-    fontSize: '14px',
-  },
 };
 
 export default PostModal;

@@ -1,4 +1,4 @@
-const Button = ({ text, onChange = () => {}, style = {} }) => {
+const Button = ({ text, onClick = () => {}, style = {},className='' }) => {
   return (
     <button
       style={{
@@ -11,7 +11,8 @@ const Button = ({ text, onChange = () => {}, style = {} }) => {
         cursor: 'pointer',
         ...style
       }}
-      onClick={onChange}
+      onClick={onClick}
+      className={className}
     >
       {text}
     </button>

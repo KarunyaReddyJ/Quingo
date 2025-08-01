@@ -6,9 +6,11 @@ import { useState, useEffect } from "react";
 import { getUserProfile } from "../services/userService";
 import PostModal from "./PostModal";
 import toast from "react-hot-toast";
-// eslint-disable-next-line react/prop-types
+import { LoadingComponent } from "./Loading";
+import { sendFriendRequest } from "../utils/friend";
+
 const ProfileModal = ({ id, name, email }) => {
-  const { setUserDetails,userDetails,loading } = useAuth();
+  const { setUserDetails, userDetails, loading } = useAuth();
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
@@ -24,51 +26,81 @@ const ProfileModal = ({ id, name, email }) => {
     setUserDetails(null);
   };
 
+  const getMutualFriendsCount = () => {
+    if (!userDetails || !profile) return 0;
+    const currentUserFriends = new Set(userDetails.friends.map(f => f._id || f));
+    return profile.friends.filter(f => currentUserFriends.has(f.id || f._id)).length;
+  };
+
   return (
-    <div style={styles.modalContainer}>
-      {
-        loading ? <h1>Loading...</h1>:(userDetails && userDetails.name === name) ? <Button text='Logout' onChange={handleLogout} />:<Button text='Add Friend' onChange={()=>{
-          toast.success('Friend Request Sent')
-        }} />
-        
-      }
+    <div className="relative p-6 max-w-5xl mx-auto min-w-2/6 rounded-xl shadow-md overflow-y-auto">
       <Button
-        onChange={handleLogout}
-        text={"Logout"}
-        style={styles.logoutButton}
+        onClick={handleLogout}
+        className="absolute top-5 right-6 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+        text="Logout"
       />
-      <div style={styles.profileInfo}>
-        <Avatar
-          name={name}
-          style={styles.avatar}
+
+      {loading ? (
+        <div className="text-center text-gray-500"><LoadingComponent /></div>
+      ) : userDetails && userDetails.name === name ? null : (
+        <Button
+          text="Add Friend"
+          onClick={async () => {
+            const res = await sendFriendRequest(id);
+            if (!res) toast.success("Friend Request Sent");
+          }}
+          className="absolute top-5 left-6 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
         />
-        <div style={styles.userDetails}>
-          <h2>{name}</h2>
-          <h4>{email}</h4>
-        </div>
-      </div>
-      <div style={styles.sectionsContainer}>
-        <div style={styles.section}>
-          <h3>Friends</h3>
-          {profile ? (
-            profile["friends"].length > 0 ? (
-              profile["friends"].map((friend) => (
-                <div key={friend.id} style={styles.friendItem}>{friend.name}</div>
-              ))
-            ) : (
-              <div>No Friends</div>
-            )
-          ) : (
-            <div>Loading...</div>
+      )}
+
+      <div className="flex flex-col items-center mb-8 mt-10">
+        <Avatar name={name} size="120" round={true} className="mb-4" />
+        <div className="text-center">
+          <h2 className="text-2xl font-bold">{name}</h2>
+          <h4 className="text-gray-600">{email}</h4>
+          {userDetails && userDetails.name !== name && (
+            <p className="text-sm text-gray-500 mt-1">
+              {getMutualFriendsCount()} mutual friend(s)
+            </p>
           )}
         </div>
+      </div>
 
-        <div style={styles.section}>
-          <h3>Posts</h3>
+      <div className="flex flex-col md:flex-row justify-between gap-10">
+        {/* Friends Section */}
+        <div className="w-full md:w-1/2 bg-gray-50 p-4 rounded-lg shadow-inner">
+          <h3 className="text-lg font-semibold mb-4">Friends</h3>
+          <div className="space-y-2 max-h-64 overflow-y-auto pr-2 custom-scroll">
+            {profile ? (
+              profile.friends.length > 0 ? (
+                profile.friends.map((friend) => (
+                  <div
+                    key={friend.id}
+                    className="flex items-center gap-3 p-2 border rounded-md bg-white hover:shadow"
+                  >
+                    <Avatar name={friend.name} size="40" round />
+                    <div>
+                      <div className="font-medium text-gray-800">{friend.name}</div>
+                      {/* Add buttons like View Profile or Message here */}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-gray-500">No Friends</div>
+              )
+            ) : (
+              <div className="text-gray-500"><LoadingComponent /></div>
+            )}
+          </div>
+        </div>
+
+        {/* Posts Section */}
+        <div className="w-full md:w-1/2">
+          <h3 className="text-lg font-semibold mb-4">Posts</h3>
           {profile ? (
-            profile["posts"].length > 0 ? (
+            profile.posts.length > 0 ? (
               <>
-                {profile["posts"].map((post) => (
+                {profile.posts.map((post) => (
                   <PostModal
                     key={post._id}
                     user={name}
@@ -78,75 +110,20 @@ const ProfileModal = ({ id, name, email }) => {
                     id={post._id}
                   />
                 ))}
-                <p style={styles.morePosts}>More Posts</p>
+                <p className="mt-3 text-blue-500 underline cursor-pointer">
+                  More Posts
+                </p>
               </>
             ) : (
-              <div>No Posts</div>
+              <div className="text-gray-500">No Posts</div>
             )
           ) : (
-            <div>Loading...</div>
+            <div className="text-gray-500"><LoadingComponent /></div>
           )}
         </div>
       </div>
     </div>
   );
-};
-
-const styles = {
-  modalContainer: {
-    padding: "20px",
-    maxWidth: "800px",
-    margin: "0 auto",
-    background: "#fff",
-    borderRadius: "10px",
-    overflowY: "auto",
-    position: "relative", // This ensures the logout button is positioned relative to this container
-  },
-  profileInfo: {
-    display: "flex",
-    alignItems: "center",
-    marginBottom: "30px",
-    justifyContent: "center",
-  },
-  avatar: {
-    width: "120px",
-    height: "120px",
-    borderRadius: "50%",
-    marginRight: "20px",
-  },
-  userDetails: {
-    textAlign: "left",
-  },
-  sectionsContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    gap: "30px",
-    marginBottom: "20px",
-  },
-  section: {
-    width: "48%",
-  },
-  friendItem: {
-    padding: "5px 0",
-    borderBottom: "1px solid #ddd",
-  },
-  logoutButton: {
-    position: "absolute",
-    top: "20px",
-    right: "30px",
-    padding: "10px 15px",
-    borderRadius: "10px",
-    backgroundColor: "#f44336", // Red color for logout button
-    color: "#fff",
-    border: "none",
-    cursor: "pointer",
-  },
-  morePosts: {
-    color: "#007BFF",
-    textDecoration: "underline",
-    cursor: "pointer",
-    marginTop: "10px",
-  },
 };
 
 export default ProfileModal;

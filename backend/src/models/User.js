@@ -7,7 +7,11 @@ const userSchema = mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    friendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    location: { type: String },
+    interests: [{ type: String }],
+    profilePicture: { type: String },
+    bio: { type: String },
+    mutualFriendsCount: { type: Number, default: 0 },
     role: { type: String, enum: ["user", "admin"], default: "user" },
   },
   { timestamps: true }

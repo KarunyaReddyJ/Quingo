@@ -1,4 +1,4 @@
-
+import Comment from "../models/Comment.js";
 import Post from '../models/Post.js'
 import User from '../models/User.js'
 
@@ -87,3 +87,56 @@ export const likePost=async(req,res,next)=>{
         next(error);
     }
 }
+
+
+export const addComment = async (req, res) => {
+  const { postId, content, parentComment=null } = req.body;
+  const userId = req.user._id; 
+
+  try {
+    const comment = await Comment.create({
+      post: postId,
+      user: userId,
+      content,
+      parentComment: parentComment || null,
+    });
+
+    await Post.findByIdAndUpdate(postId, { $inc: { commentCount: 1 } });
+
+    res.status(201).json(comment);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to add comment" });
+  }
+};
+
+
+export const getPostComments = async (req, res) => {
+  const { postId } = req.params;
+
+  try {
+    const topLevelComments = await Comment.find({ post: postId, parentComment: null })
+      .populate("user", "name")
+      .sort({ createdAt: -1 });
+
+    const commentTree = await Promise.all(
+      topLevelComments.map(async (comment) => {
+        const replies = await getRepliesRecursive(comment._id);
+        return { ...comment.toObject(), replies };
+      })
+    );
+
+    res.json(commentTree);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch comments" });
+  }
+};
+
+const getRepliesRecursive = async (parentId) => {
+  const replies = await Comment.find({ parentComment: parentId }).populate("user", "name");
+  return Promise.all(
+    replies.map(async (reply) => {
+      const nestedReplies = await getRepliesRecursive(reply._id);
+      return { ...reply.toObject(), replies: nestedReplies };
+    })
+  );
+};

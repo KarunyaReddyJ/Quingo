@@ -12,13 +12,19 @@ import AddPost from "./pages/AddPost";
 import Profile from "./pages/Profile";
 import Friend from "./pages/Friend";
 import NotFound from "./pages/NotFound";
+import ChatInterface from "./pages/ChatInterface"
+import { ChatContextProvider } from "./context_provider/ChatContextProvider";
+import CreateChatRoom from "./components/CreateChatRoom";
+
 
 function App() {
   return (
     <BrowserRouter>
+      <div className="bg-gray-50 w-screen h-screen mx-0 font-sans" >
       <AuthContextProvider>
         <Toaster />
         <PostContextProvider>
+          <ChatContextProvider>
           <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -27,11 +33,17 @@ function App() {
             <Route path="/post" element={<AddPost/>}/>
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/friend" element={<Friend/>} />
+            <Route path="/chat" element={<ChatInterface/>} />
+            <Route path="/create-chat" element={<CreateChatRoom/>} />
+
             <Route path="*" element={<NotFound/>} />
           </Routes>
           </Layout>
+          </ChatContextProvider>
         </PostContextProvider>
       </AuthContextProvider>
+
+      </div>
     </BrowserRouter>
   );
 }
