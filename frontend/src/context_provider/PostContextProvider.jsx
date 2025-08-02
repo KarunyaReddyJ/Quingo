@@ -13,7 +13,7 @@ export const PostContextProvider=({children})=>{
             const data=await getFeed()
             setPosts(data)
             setLoading(false)
-            console.log('from post context provider')
+            console.log('from post context provider',data)
         }
         checkIfUserActiveSession()
     }, [userDetails]);

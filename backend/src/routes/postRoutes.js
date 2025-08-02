@@ -1,6 +1,7 @@
 
 import express from 'express'
 import { createPost,readPosts,deletePost,likePost,getPostComments,addComment } from '../controllers/postController.js'
+import testIfWorking from '../middlewares/testWorking.js'
 const router=express.Router()
 
 router.route('/')
@@ -11,9 +12,12 @@ router.route('/')
 router.route('/like/:id')
 .put(likePost)
 
+router.route('/comment',testIfWorking)
+.post(addComment)
+
 router.route('/comment/:id')
 .get(getPostComments)
-.post(addComment)
+
 
 router.route('/delete/:id')
 .delete(deletePost)

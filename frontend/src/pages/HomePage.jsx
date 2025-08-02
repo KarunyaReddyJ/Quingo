@@ -60,11 +60,11 @@ const HomePage = () => {
       
     }
   };
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-  //  fakePosts()
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  // //  fakePosts()
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
 
   // useEffect(() => {
   //   if (!postsLoading) {
@@ -90,7 +90,7 @@ const HomePage = () => {
               user={post.user}
               content={post.content}
               likes={post.likes?.length || 0}
-              comments={post.comments?.length || 0}
+              commentCount={post.commentCount || 0}
               id={post._id}
             />
           </div>

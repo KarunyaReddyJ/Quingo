@@ -4,12 +4,12 @@ import { usePosts } from '../hooks/usePosts';
 import { useState } from 'react';
 import { useAuth } from "../hooks/useAuth";
 import { FaHeart, FaRegHeart, FaCommentAlt, FaTrashAlt } from "react-icons/fa";
-
-const PostModal = ({ id, user, content, likes, comments }) => {
+import { useNavigate } from 'react-router-dom';
+const PostModal = ({ id, user, content, likes, commentCount }) => {
   const { setPosts } = usePosts();
   const { userDetails } = useAuth();
-  const [post, setPost] = useState({ id, user, content, likes, comments });
-
+  const [post, setPost] = useState({ id, user, content, likes, commentCount });
+  const navigate = useNavigate()
   const likeThePost = async () => {
     const data = await likePost(id);
     setPost(data);
@@ -24,6 +24,10 @@ const PostModal = ({ id, user, content, likes, comments }) => {
     setPosts((posts) => posts.filter((post) => post._id !== id));
     toast.success('Successfully deleted');
   };
+
+  const expandPostView=()=>{
+    navigate('/view-post',{state:post})
+  }
 
   const isLiked = post.likes > 0; // customize this logic if you track individual user likes
 
@@ -52,9 +56,9 @@ const PostModal = ({ id, user, content, likes, comments }) => {
           <span>{post.likes}</span>
         </button>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1" onClick={expandPostView} >
           <FaCommentAlt />
-          <span>{post.comments}</span>
+          <span>{post.commentCount}</span>
         </div>
 
         {userDetails?.name === post.user && (

@@ -90,7 +90,8 @@ export const likePost=async(req,res,next)=>{
 
 
 export const addComment = async (req, res) => {
-  const { postId, content, parentComment=null } = req.body;
+  const { postId, content, parentComment='' } = req.body;
+  console.log({ postId, content, parentComment })
   const userId = req.user._id; 
 
   try {
@@ -111,10 +112,10 @@ export const addComment = async (req, res) => {
 
 
 export const getPostComments = async (req, res) => {
-  const { postId } = req.params;
+  const { id } = req.params;
 
   try {
-    const topLevelComments = await Comment.find({ post: postId, parentComment: null })
+    const topLevelComments = await Comment.find({ post: id, parentComment: null })
       .populate("user", "name")
       .sort({ createdAt: -1 });
 
